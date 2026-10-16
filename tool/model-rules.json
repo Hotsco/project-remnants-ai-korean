@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "rules": [
+    {
+      "match": ["gpt-6-luna", "gpt-6-luna-????-??-??", "gpt-6-sol", "gpt-6-sol-????-??-??"],
+      "token_parameter": "max_completion_tokens",
+      "default_reasoning": "none",
+      "drop_sampling_with_reasoning": true
+    },
+    {
+      "match": ["gpt-6.1-sol", "gpt-6.1-sol-????-??-??"],
+      "token_parameter": "max_completion_tokens",
+      "default_reasoning": "low",
+      "drop_parameters": ["temperature", "top_p"]
+    },
+    {
+      "match": ["claude-*"],
+      "drop_parameters": ["temperature", "top_p"]
+    }
+  ]
+}

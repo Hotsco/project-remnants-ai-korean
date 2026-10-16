@@ -56,7 +56,7 @@ def bridge_listening(port):
 
 def start_when_ready(timeout):
     print("Setup의 LLM Companion 탭에서 Configure and Start를 눌러주세요.", flush=True)
-    print("중계 서버를 확인하면 Luna 변환기를 자동으로 시작합니다.", flush=True)
+    print("중계 서버를 확인하면 AI 대화 변환기를 자동으로 시작합니다.", flush=True)
     deadline = time.monotonic() + timeout
     stable_signature, stable_since = None, None
     while time.monotonic() < deadline:
@@ -91,7 +91,7 @@ def main():
     path = setup_path(interactive=not args.check)
     if args.check:
         print("Setup: " + str(path))
-        print("Luna: " + str(ROOT / "adapter.py"))
+        print("AI 대화 변환기: " + str(ROOT / "adapter.py"))
         print("Python: " + str(Path(sys.executable)))
         return 0
     kernel = ctypes.WinDLL("kernel32", use_last_error=True)
@@ -110,10 +110,10 @@ def main():
             # Setup is the interactive GUI explicitly requested by the user.
             subprocess.Popen([str(path)], cwd=str(path.parent))
         start_when_ready(args.timeout)
-        print("Setup 중계 서버와 Luna 변환기가 실행 중입니다. 이제 게임을 실행하세요.", flush=True)
+        print("Setup 중계 서버와 AI 대화 변환기가 실행 중입니다. 이제 게임을 실행하세요.", flush=True)
         ctypes.windll.user32.MessageBoxW(None,
-            "Setup 중계 서버와 Luna 변환기가 실행 중입니다.\n이제 좀보이드를 실행하세요.",
-            "좀보이드 Luna 실행 준비 완료", 0x40)
+            "Setup 중계 서버와 AI 대화 변환기가 실행 중입니다.\n이제 좀보이드를 실행하세요.",
+            "좀보이드 AI 대화 실행 준비 완료", 0x40)
         return 0
     finally:
         kernel.CloseHandle(handle)

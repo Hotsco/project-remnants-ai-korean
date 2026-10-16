@@ -19,9 +19,10 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlsplit
 import paths
 import dialogue
+import model_compat
 
 SERVICE = "npcfw-luna-adapter"
-VERSION = "1.1"
+VERSION = "1.2"
 PORT = 20140
 ROUTE = "/v1/chat/completions"
 ENDPOINT = f"http://127.0.0.1:{PORT}{ROUTE}"
@@ -68,23 +69,14 @@ def validate_upstream(doc, allowed_ports=range(20129, 20140)):
     return url.port
 
 
-def adapt_request(raw, context_path=None):
+def adapt_request(raw, context_path=None, rules_path=None):
     doc = decode(raw)
-    model = doc.get("model", "")
-    if not isinstance(model, str):
-        raise ValueError("Invalid model")
-    model = model.lower()
-    if model != "gpt-6-luna" and not model.startswith("gpt-6-luna-"):
-        return raw, False
-    if "max_tokens" in doc:
-        limit = doc.pop("max_tokens")
-        doc.setdefault("max_completion_tokens", limit)
-    doc.setdefault("reasoning_effort", "none")
-    if doc["reasoning_effort"] != "none":
-        doc.pop("temperature", None)
-        doc.pop("top_p", None)
-    dialogue.enhance(doc, context_path=context_path)
-    return encode(doc), True
+    parameters_changed = model_compat.adapt_parameters(doc, rules_path)
+    # Dialogue and current observations are shared by all compatible API models.
+    # Keep this call separate: parameter changes must not short-circuit it.
+    dialogue_changed = dialogue.enhance(doc, context_path=context_path)
+    changed = parameters_changed or dialogue_changed
+    return (encode(doc), True) if changed else (raw, False)
 
 
 class Adapter:
@@ -252,7 +244,7 @@ class Handler(BaseHTTPRequestHandler):
             while chunk := response.read1(8192):
                 self.wfile.write(chunk)
                 self.wfile.flush()
-            logging.info("Request complete: upstream_status=%s luna_conversion=%s", response.status, changed)
+            logging.info("Request complete: upstream_status=%s request_adapted=%s", response.status, changed)
         except (OSError, http.client.HTTPException, ValueError):
             logging.warning("Request failed: check that Setup is configured and running")
             if not headers_sent:
