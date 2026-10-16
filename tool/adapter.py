@@ -22,7 +22,7 @@ import dialogue
 import model_compat
 
 SERVICE = "npcfw-luna-adapter"
-VERSION = "1.2"
+VERSION = "1.0.0"
 PORT = 20140
 ROUTE = "/v1/chat/completions"
 ENDPOINT = f"http://127.0.0.1:{PORT}{ROUTE}"
