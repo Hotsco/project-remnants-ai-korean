@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NPC 설정 · Project Remnants</title><link rel="stylesheet" href="/npc-settings.css"><script src="/npc-settings.js" defer></script></head>
+<body><main>
+<header><div><span class="eyebrow">PROJECT REMNANTS</span><h1>NPC 설정</h1><p>세이브에 저장된 프로필을 불러오고 수정합니다.</p></div><div class="top-actions"><span id="game-status" class="tag">연결 중</span><button id="quit" class="quiet">설정창 종료</button></div></header>
+<details id="locations"><summary>설치 위치</summary><div class="locations">
+<label for="userdata">사용자 데이터 폴더</label><div class="path"><input id="userdata" placeholder="Zomboid 폴더"><button data-choose="userdata">찾기</button></div>
+<label for="game">게임 설치 폴더</label><div class="path"><input id="game" placeholder="Project Zomboid 설치 폴더"><button data-choose="game">찾기</button></div>
+<label for="mod">Remnants 파일</label><div class="path"><input id="mod" list="mod-choices" placeholder="NPCFW.jar"><datalist id="mod-choices"></datalist><button data-choose="mod">찾기</button></div>
+<button id="configure">위치 적용</button></div></details>
+<div id="notice" role="status" aria-live="polite" class="notice">세이브 목록을 불러오고 있습니다.</div>
+<div class="workspace"><aside>
+<div class="section-title"><h2>세이브</h2><button id="refresh" class="quiet small">새로고침</button></div>
+<label class="sr-only" for="saves">편집할 세이브</label><select id="saves"><option value="">세이브를 선택하세요</option></select>
+<h2 class="npc-heading">NPC</h2><div id="npc-list" class="npc-list"><p class="muted">세이브를 선택하면 NPC가 표시됩니다.</p></div>
+</aside><section class="editor" aria-labelledby="npc-name">
+<div class="editor-heading"><div><span class="eyebrow">CHARACTER PROFILE</span><h2 id="npc-name">NPC를 선택하세요</h2><p id="npc-meta" class="muted">기존 프로필을 그대로 불러옵니다.</p></div><span id="saved-state" class="tag">선택 전</span></div>
+<label for="profile">프로필</label><textarea id="profile" spellcheck="false" disabled placeholder="NPC를 선택해주세요."></textarea>
+<div class="under-editor"><span>성격·말투, 과거와 플레이어와의 관계를 적어주세요.</span><span id="count">0자</span></div>
+<details id="template"><summary>항목별 작성 도움</summary><p class="muted">인물의 기본 설정과 관계의 시작을 적어주세요. 기존 대화 기록과 관계 기억은 유지됩니다.</p><div class="template-grid">
+<label>성격·말투<textarea data-field="성격·말투" placeholder="털털하고 솔직하다. 반말과 가벼운 농담을 쓴다."></textarea></label>
+<label>과거·경험<textarea data-field="과거·경험" placeholder="전역 후 민간인으로 살던 군인이다."></textarea></label>
+<label>관계의 시작<textarea data-field="관계의 시작" placeholder="혼자 버티다 플레이어를 만나 함께하기로 했다."></textarea></label>
+<label>상황별 판단 기준<textarea data-field="상황별 판단 기준" placeholder="좀비가 여럿 보이면 싸우기보다 우회하자고 제안한다. 동료가 다치면 수색을 미루고 치료부터 하자고 말한다."></textarea></label>
+<label class="wide">추가 설정 <span class="muted">선택</span><textarea data-field="추가 설정" placeholder="반드시 기억했으면 하는 설정"></textarea></label>
+</div><button id="compose" disabled>프로필에 반영</button></details>
+<div class="actions"><button id="reload" disabled>다시 불러오기</button><button id="verify" disabled>저장 내용 확인</button><button id="save" class="primary" disabled>저장하고 확인</button></div>
+<p class="footnote">저장할 때는 게임을 완전히 종료해주세요. 이전 내용은 자동으로 백업됩니다.</p>
+<details id="backup-details" hidden><summary>이전 내용 백업 위치</summary><p id="backup-path" class="file-path"></p></details>
+</section></div></main>
+<dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-message"><h2 id="confirm-title">변경 내용 확인</h2><p id="confirm-message"></p><div class="actions"><button id="confirm-cancel">취소</button><button id="confirm-ok" class="primary">계속</button></div></dialog>
+</body></html>
